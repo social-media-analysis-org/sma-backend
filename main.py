@@ -1,20 +1,24 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from datetime import datetime
+from routes.posts import posts_bp
+from routes.chat import chats_bp
+# from flask_cors import CORS
 import logging
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
-# Initialize Flask app
 app = Flask(__name__)
+# CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE"]}})
+
+app.register_blueprint(posts_bp, url_prefix='/posts')
+app.register_blueprint(chats_bp, url_prefix='/chat')
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    """Basic health check endpoint"""
     return jsonify({
         'status': 'healthy',
         'timestamp': datetime.now().isoformat()
@@ -22,7 +26,6 @@ def health_check():
 
 @app.errorhandler(Exception)
 def handle_error(error):
-    """Global error handler"""
     logger.error(f'An error occurred: {str(error)}')
     return jsonify({'error': 'Internal server error'}), 500
 
