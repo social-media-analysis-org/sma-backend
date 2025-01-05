@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 chats_bp = Blueprint('chat', __name__)
 
-@chats_bp.route('/', methods=['GET'])
+@chats_bp.route('/chat', methods=['GET'])
 def process_query():
     query = request.args.get('query', type=str)
 

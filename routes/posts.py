@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 posts_bp = Blueprint('posts', __name__)
 
-@posts_bp.route('/', methods=['GET'])
+@posts_bp.route('/posts', methods=['GET'])
 def get_posts():
     skip = request.args.get('skip', default=1, type=int)
     limit = request.args.get('limit', default=10, type=int)
@@ -34,7 +34,7 @@ def get_posts():
 
     return { 'posts': data, 'posts_count': data_count }
 
-@posts_bp.route('/<post_id>', methods=['GET'])
+@posts_bp.route('/posts/<post_id>', methods=['GET'])
 def get_post_by_id(post_id):
     data = collection.find_one({
         '_id': post_id,
@@ -43,7 +43,7 @@ def get_post_by_id(post_id):
 
     return {'post_details': data}
 
-@posts_bp.route('/', methods=['POST'])
+@posts_bp.route('/posts', methods=['POST'])
 def add_post():
     limit = 5
     data = request.get_json()

@@ -20,21 +20,22 @@ app.secret_key = os.urandom(24)
 
 CORS(app, resources={
     r"/*": {
-        "origins": os.getenv('FRONTEND_URL')
+        "origins": os.getenv('FRONTEND_URL'),
     }
 })
 
 @app.before_request
 def log_origin_header():
-    # Get the Origin header from the request
     origin = request.headers.get('Origin')
     if origin:
         app.logger.info(f"Origin: {origin}")
+        app.logger.info(f"Body:  {request.get_data()}")
+        app.logger.info(f"Method: {request.method}")
     else:
         app.logger.info("No Origin header present")
 
-app.register_blueprint(posts_bp, url_prefix='/posts')
-app.register_blueprint(chats_bp, url_prefix='/chat')
+app.register_blueprint(posts_bp, url_prefix='/api')
+app.register_blueprint(chats_bp, url_prefix='/api')
 
 @app.route('/health', methods=['GET'])
 def health_check():
