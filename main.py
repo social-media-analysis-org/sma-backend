@@ -32,6 +32,8 @@ def handle_error(error):
     logger.error(f'An error occurred: {str(error)}')
     return jsonify({'error': 'Internal server error'}), 500
 
+def create_app():
+    return app
 
 if __name__ == '__main__':
     app.run(debug=True)
