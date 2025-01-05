@@ -15,7 +15,17 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 origins = os.getenv('FRONTEND_URL').split(',')
-CORS(app, origins=origins, methods=["GET", "POST"])
+# CORS(app, origins=origins, methods=["GET", "POST"])
+CORS(app, resources={
+    r"/api/*": {
+        "origins": origins,
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "expose_headers": ["Content-Range", "X-Content-Range"],
+        "supports_credentials": True,
+        "max_age": 3600
+    }
+})
 
 app.register_blueprint(posts_bp, url_prefix='/posts')
 app.register_blueprint(chats_bp, url_prefix='/chat')
