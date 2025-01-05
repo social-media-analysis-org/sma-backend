@@ -1,8 +1,9 @@
+import os
 from flask import Flask, jsonify
 from datetime import datetime
 from routes.posts import posts_bp
 from routes.chat import chats_bp
-# from flask_cors import CORS
+from flask_cors import CORS
 import logging
 
 logging.basicConfig(
@@ -13,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 # CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE"]}})
+CORS(app, origins=[os.getenv('FRONTEND_URL')])
 
 app.register_blueprint(posts_bp, url_prefix='/posts')
 app.register_blueprint(chats_bp, url_prefix='/chat')
