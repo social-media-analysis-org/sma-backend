@@ -43,7 +43,7 @@ def get_post_by_id(post_id):
 
     return {'post_details': data}
 
-@posts_bp.route('/', methods=['PUT'])
+@posts_bp.route('/', methods=['POST'])
 def add_post():
     limit = 5
     data = request.get_json()
