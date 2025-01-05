@@ -20,7 +20,7 @@ app.secret_key = os.urandom(24)
 
 CORS(app, resources={
     r"/*": {
-        "origins": os.getenv('FRONTEND_URL'),
+        "origins": '*',
     }
 })
 
