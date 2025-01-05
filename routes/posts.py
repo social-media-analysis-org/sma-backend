@@ -45,6 +45,7 @@ def get_post_by_id(post_id):
 
 @posts_bp.route('/', methods=['POST'])
 def add_post():
+    limit = 5
     data = request.get_json()
 
     if data is None:
@@ -52,6 +53,9 @@ def add_post():
 
     post_type = data.get('post_type')
     post_count = data.get('post_count')
+
+    if post_count > limit:
+        return jsonify({"error": "Maximum 5 Posts can be added"}), 400
 
     pending_posts_match = {
         'rag': False,
