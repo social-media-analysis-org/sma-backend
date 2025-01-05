@@ -15,13 +15,15 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 origins = os.getenv('FRONTEND_URL').split(',')
-# CORS(app, origins=origins, methods=["GET", "POST"])
+
 CORS(app, resources={
     r"/*": {
         "origins": "*",
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": "*",
-        "expose_headers": "*"
+        "allow_headers": ["Content-Type", "Authorization", "Access-Control-Allow-Credentials", "X-Requested-With"],
+        "expose_headers": ["Content-Range", "X-Content-Range"],
+        "supports_credentials": True,
+        "send_wildcard": False
     }
 })
 
