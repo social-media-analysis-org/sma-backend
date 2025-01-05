@@ -18,12 +18,7 @@ origins = os.getenv('FRONTEND_URL').split(',')
 
 CORS(app, resources={
     r"/*": {
-        "origins": "*",
-        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization", "Access-Control-Allow-Credentials", "X-Requested-With"],
-        "expose_headers": ["Content-Range", "X-Content-Range"],
-        "supports_credentials": False,
-        "send_wildcard": False
+        "origins": os.getenv('FRONTEND_URL')
     }
 })
 
