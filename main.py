@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from datetime import datetime
 from routes.posts import posts_bp
 from routes.chat import chats_bp
@@ -18,13 +18,20 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-origins = os.getenv('FRONTEND_URL').split(',')
-
 CORS(app, resources={
     r"/*": {
         "origins": os.getenv('FRONTEND_URL')
     }
 })
+
+@app.before_request
+def log_origin_header():
+    # Get the Origin header from the request
+    origin = request.headers.get('Origin')
+    if origin:
+        app.logger.info(f"Origin: {origin}")
+    else:
+        app.logger.info("No Origin header present")
 
 app.register_blueprint(posts_bp, url_prefix='/posts')
 app.register_blueprint(chats_bp, url_prefix='/chat')

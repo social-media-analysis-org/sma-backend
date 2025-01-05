@@ -10,14 +10,13 @@ logger = logging.getLogger(__name__)
 
 chats_bp = Blueprint('chat', __name__)
 
-@chats_bp.route('/', methods=['POST'])
+@chats_bp.route('/', methods=['GET'])
 def process_query():
-    data = request.get_json()
+    query = request.args.get('query', type=str)
 
-    if data is None:
+    if query is None:
         return jsonify({"error": "No JSON data provided"}), 400
 
-    query = data.get('query')
     result = fetch_result(query)
     message = get_message(result)
 
