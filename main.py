@@ -5,6 +5,9 @@ from routes.posts import posts_bp
 from routes.chat import chats_bp
 from flask_cors import CORS
 import logging
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -13,6 +16,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 origins = os.getenv('FRONTEND_URL').split(',')
 
