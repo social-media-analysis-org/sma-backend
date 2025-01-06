@@ -3,9 +3,8 @@ import os
 from dotenv import load_dotenv
 import logging
 from database import collection, vector_collection
-from datetime import datetime
-from helper import array_to_csv, upload_csv_file
-from api_langflow import add_data_in_rag
+from helper import array_to_csv, upload_csv_file, get_message
+from api_langflow import add_data_in_rag, query_engagement
 
 load_dotenv()
 
@@ -18,7 +17,7 @@ def get_posts():
     skip = request.args.get('skip', default=1, type=int)
     limit = request.args.get('limit', default=10, type=int)
 
-    match = {'rag': True}
+    match = {'rag': 'true'}
 
     if skip < 0 or limit < 1:
         return jsonify({"error": "Skip and Limit must be positive integers"}), 400
@@ -38,7 +37,7 @@ def get_posts():
 def get_post_by_id(post_id):
     data = collection.find_one({
         '_id': post_id,
-        'rag': True
+        'rag': 'true'
     })
 
     return {'post_details': data}
@@ -58,7 +57,7 @@ def add_post():
         return jsonify({"error": "Maximum 5 Posts can be added"}), 400
 
     pending_posts_match = {
-        'rag': False,
+        'rag': 'false',
         'type': post_type
     }
     limit = post_count
@@ -77,20 +76,19 @@ def add_post():
             {'_id': post.get('_id')},
             {
                 '$set': {
-                    'rag': True,
-                    'add_timestamp': datetime.now()
+                    'rag': 'true',
                 }
             }
         )
 
-    match = {'rag': True}
+    match = {'rag': 'true'}
 
     data = list(collection.find(
         match
     ))
 
-    csv_result = array_to_csv(data, file_name)
-    upload_csv_file_result = upload_csv_file(file_name)
+    array_to_csv(data, file_name)
+    upload_csv_file(file_name)
 
     vector_collection.delete_all()
 
@@ -99,3 +97,12 @@ def add_post():
     os.remove(file_name)
 
     return {'success': True, 'message': 'Posts Added Successfully'}
+
+@posts_bp.route('/average-engagement', methods=['GET'])
+def post_type_average_engagement():
+    type = request.args.get('type', default='Image', type=str)
+
+    result = query_engagement(type)
+    message = get_message(result)
+
+    return {'result': message}
