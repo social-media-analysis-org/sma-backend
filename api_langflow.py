@@ -15,11 +15,11 @@ def add_data_in_rag(input_message: str):
         "output_type": "text",
         "input_type": "chat",
         "tweaks": {
-            "SplitText-j6HlH": {},
-            "AstraDB-ygzpP": {},
-            "OpenAIEmbeddings-RLDQw": {},
-            "URL-V9koU": {},
-            "ChatInput-UXGEz": {}
+            "SplitText-3y1E9": {},
+            "AstraDB-IFai9": {},
+            "OpenAIEmbeddings-2DEjQ": {},
+            "URL-vv37c": {},
+            "ChatInput-pUibl": {}
         }
     }
 
@@ -44,15 +44,15 @@ def fetch_result(input_message: str):
         "output_type": "chat",
         "input_type": "chat",
         "tweaks": {
-            "AstraDB-8EbmW": {},
-            "OpenAIEmbeddings-xtphZ": {},
-            "ChatInput-j3u2L": {},
-            "RetrieverTool-9y7D2": {
+            "AstraDB-9Bl2g": {},
+            "OpenAIEmbeddings-NhvT4": {},
+            "ChatInput-2rQeF": {},
+            "RetrieverTool-GHlBs": {
                 "description": "You're a Retrieval Tool to retrieve data related to the posts",
                 "name": "RetrievePostaData"
             },
-            "Agent-DGRUN": {},
-            "ChatOutput-vG7DR": {}
+            "Agent-jDKNq": {},
+            "ChatOutput-2CetC": {}
         }
     }
 
