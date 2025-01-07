@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 import os
 from dotenv import load_dotenv
 import logging
-from database import collection, vector_collection
+from database import collection, vector_collection, engagement_collection
 from helper import array_to_csv, upload_csv_file, get_message
 from api_langflow import add_data_in_rag, query_engagement
 
@@ -96,13 +96,28 @@ def add_post():
     add_data_in_rag(file_url)
     os.remove(file_name)
 
+    engagement_collection.delete_all()
+
     return {'success': True, 'message': 'Posts Added Successfully'}
 
 @posts_bp.route('/average-engagement', methods=['GET'])
 def post_type_average_engagement():
     type = request.args.get('type', default='Image', type=str)
 
-    result = query_engagement(type)
-    message = get_message(result)
+    result = engagement_collection.find_one({
+        'type': type
+    })
+    message = ''
+
+    if not result:
+        result = query_engagement(type)
+        message = get_message(result)
+        if message != 'Something went wrong!':
+            engagement_collection.insert_one({
+                'type': type,
+                'message': message
+            })
+    else:
+        message = result.get('message')
 
     return {'result': message}
